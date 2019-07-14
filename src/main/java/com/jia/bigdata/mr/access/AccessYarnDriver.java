@@ -16,14 +16,14 @@ import org.apache.hadoop.fs.*;
  */
 public class AccessYarnDriver extends Configured implements Tool {
     public static void main(final String[] args) throws Exception {
-        final int res = ToolRunner.run(new Configuration(), (Tool) new AccessYarnDriver(), args);
+        final int res = ToolRunner.run(new Configuration(), new AccessYarnDriver(), args);
         System.exit(res);
     }
 
     public int run(final String[] args) throws Exception {
         final Job job = JobFactory.create(AccessDriver.class, AccessMapper.class, AccessReducer.class, Text.class, Access.class, Text.class, Access.class);
         job.setPartitionerClass((Class) AccessPartitioner.class);
-        job.setNumReduceTasks(3);
+        job.setNumReduceTasks(1);
         final Path path = new Path(args[1]);
         final FileSystem fileSystem = path.getFileSystem(job.getConfiguration());
         if (fileSystem.exists(path)) {
